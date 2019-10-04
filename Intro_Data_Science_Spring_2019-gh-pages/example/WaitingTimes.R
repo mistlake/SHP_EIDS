@@ -101,7 +101,7 @@ summary(wait_time)
 # or take file I downloaded from https://github.com/lydiahsu/Intro_Data_Science_Spring_2019/blob/master/turnstile_190105.txt
 install.packages("readr")
 library(readr)
-setwd("C:/Users/owenw/Google Drive/Data Science Course_SHP/Simulation/Spring 19/")
+setwd("") # where you downloaded the data. if desktop then "~/Desktop"
 turnstyle <- read_csv("turnstile_190105.txt")
 
 # convert the dates to R formatting
