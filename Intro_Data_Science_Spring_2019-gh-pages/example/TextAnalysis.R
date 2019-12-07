@@ -54,6 +54,7 @@ monte_cristo <- gutenberg_download(1184)
 
 monte_cristo %>%
   unnest_tokens(word, text) %>%
+  anti_join(stop_words) %>%
   count(word, sort = T)
 
 austen <- gutenberg_works(author == "Austen, Jane") %>%
@@ -97,7 +98,7 @@ ggplot(jane_austen_sentiment, aes(index, sentiment, fill = book)) +
 
 
 ## Wordclouds
-
+install.packages("wordcloud")
 library(wordcloud)
 
 tidy_books %>%
