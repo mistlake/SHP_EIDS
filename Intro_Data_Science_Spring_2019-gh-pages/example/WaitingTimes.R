@@ -8,9 +8,9 @@
 
 #Author:  Owen Ward
 #Summary: 
-## 1. 
-## 2. 
-## 3. 
+## 1. Simulate some data
+## 2. Analyse real NYC data
+## 3. Compare the performances
 
 
 ## Simulate Arrival Times of Train
@@ -66,10 +66,9 @@ hist(wait_time)
 mean(wait_time)
 summary(wait_time)
 
-# this more likely, poisson process, then runif. this is actually a worse performance
-# in terms on mean and max.
-# poisson process can be used for lots of queueing theory and applied probability problems 
-# like this
+# this more likely, poisson process, then runif. it doesn't really matter,
+# will still be waiting the same length of time, on average, for 
+# a train, although longest possible wait different.
 
 
 
@@ -95,13 +94,15 @@ summary(wait_time)
 # investigate if poisson process assumption is reasonable, etc
 
 
+### Analysing NYC turnstyle data ####
+
 # have turnstyle data
 # try verify if a Poisson process is reasonable
 # data can be downloaded from http://web.mta.info/developers/turnstile.html
 # or take file I downloaded from https://github.com/lydiahsu/Intro_Data_Science_Spring_2019/blob/master/turnstile_190105.txt
 install.packages("readr")
 library(readr)
-setwd("") # where you downloaded the data. if desktop then "~/Desktop"
+setwd("C:/Users/owenw/Google Drive/Teaching_TA/Data Science Course_SHP/Simulation/Spring 19/")
 turnstyle <- read_csv("turnstile_190105.txt")
 
 # convert the dates to R formatting
@@ -114,7 +115,7 @@ summary(as.Date(turnstyle$DATE, format = "%m/%d/%Y"))
 turnstyle$ENTRIES <- as.numeric(turnstyle$ENTRIES)
 turnstyle$EXITS <- as.numeric(turnstyle$EXITS)
 
-# verify poisson Process for a single station
+# Investigate poisson Process for a single station
 # pick 116th on the 1 line (Columbia University)
 
 
@@ -127,7 +128,7 @@ head(columbia_station)
 # now want to mutate this so that we just have the total 
 # station counts for each 4 hour period
 library(dplyr)
-totals <- columbia_station %>%group_by(DATE,TIME,) %>%
+totals <- columbia_station %>% group_by(DATE,TIME,) %>%
   summarise(people_in = sum(ENTRIES),
             people_out = sum(EXITS))
 
@@ -146,6 +147,8 @@ totals$out_per <- out_per_time
 
 
 # then check if these look to be poisson ditributed, etc
+# this would mean that the average number of people in in each time window would
+# be the same. does this seem reasonable?
 library(ggplot2)
 ggplot(totals,aes(in_per)) + geom_histogram()
 ggplot(totals,aes(out_per)) + geom_histogram()
@@ -170,3 +173,34 @@ ggplot(totals,aes(in_per)) +
 
 ggplot(totals,aes(samples_in)) + 
   geom_histogram(fill="red", alpha = 0.2)
+
+
+# investigate the relationship between people coming in and out and the time
+# what could be causing the relationship to change over time?
+
+ggplot(totals,aes(TIME,in_per)) + geom_point()
+ggplot(totals,aes(TIME,out_per)) + geom_point()
+
+ggplot(totals,aes(as.factor(as.numeric(TIME)/3600),in_per)) + geom_boxplot() +
+  xlab("End of Time Period") +
+  ylab("Passengers entering")
+
+
+ggplot(totals,aes(as.factor(as.numeric(TIME)/3600),out_per)) + geom_boxplot() +
+  xlab("End of Time Period") +
+  ylab("Passengers exiting")
+
+# fit a Poisson regression without and with the time and see how it looks
+
+model <- glm(in_per ~ TIME+DATE,data = totals, family = poisson(link="log") )
+summary(model)
+
+
+### To Do ###
+# Repeat the above analysis for another station. Pick one that would be 
+# interesting (Times Square, Wall Street), and see what you can discover
+
+
+
+
+
