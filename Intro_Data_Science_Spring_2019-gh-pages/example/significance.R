@@ -11,7 +11,7 @@
 
 
 # set the working directory you want to use
-setwd("C://Users/owenw/Google Drive/Teaching_TA/Data Science Course_SHP/Significance")
+setwd("C://Users/Desktop")
 
 
 # install and load some of the required packages we need
