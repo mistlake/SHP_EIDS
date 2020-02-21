@@ -11,7 +11,7 @@
 
 
 # set the working directory you want to use
-setwd("C://Users/owenw/Google Drive/Data Science Course_SHP/Significance")
+setwd("C://Users/owenw/Google Drive/Teaching_TA/Data Science Course_SHP/Significance")
 
 
 # install and load some of the required packages we need
@@ -44,12 +44,13 @@ c(nrow(crashes), ncol(crashes))
 # Summarizing Columns of Dataframes
 # Remember we access a variable of a df with $
 head(crashes$DATE)
-tail(crashes$DATE)
-class(crashes$DATE)
-summary(crashes$DATE)
+head(crashes$`CRASH DATE`)
+tail(crashes$`CRASH DATE`)
+class(crashes$`CRASH DATE`)
+summary(crashes$`CRASH DATE`)
 summary(object = crashes$DATE)
 
-crashes$date <- as.Date(x = crashes$DATE, format = "%m/%d/%Y") #add new column
+crashes$date <- as.Date(x = crashes$`CRASH DATE`, format = "%m/%d/%Y") #add new column
 dim(crashes)
 head(crashes$date)
 class(crashes$date)
@@ -105,7 +106,7 @@ pbinom(q = sum(crashes$half == "First Half"),
        size = nrow(crashes), 
        prob = .5,
        log = TRUE)
-exp(-3299.008)
+exp(-4088.944)
 
 #What's wrong with our definition of the first half of the month?
 every_day <- data.frame()
