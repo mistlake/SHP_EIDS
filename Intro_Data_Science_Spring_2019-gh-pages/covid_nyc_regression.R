@@ -27,7 +27,8 @@ plot_data <- function(cov_dat,label_breaks = 15,logarithm=FALSE){
 }
 
 #Plot the imported COVID data
-plot_data(daily_covid)
+daily_plot <- plot_data(daily_covid)
+daily_plot
 
 #Take just the first two weeks of data and plot
 covid_early <- daily_covid[1:14,]
@@ -39,6 +40,7 @@ log_plot <- plot_data(covid_early,label_breaks=1,logarithm=TRUE)
 log_plot
 
 #Fit a simple linear regression of the log case numbers against the day
+day_count <- seq(1,nrow(covid_early),1)
 early_mod <- lm(log(covid_early$POSITIVE_TESTS)~day_count)
 log_plot <- log_plot + geom_smooth(method='lm',se=FALSE,color='red')
 log_plot
@@ -53,6 +55,10 @@ exp_fit <- function(x) {
 #Plot this exponential curve through the early data
 early_plot <- early_plot + stat_function(fun = exp_fit,size=1.2,color='red',alpha=0.7)
 early_plot
+
+#Plot this exponential curve through the full data
+daily_plot <- daily_plot +  ylim(c(0,7000)) + stat_function(fun = exp_fit,size=1.2,color='red',alpha=0.7)
+daily_plot
 
 #Take and plot the data from after the first two weeks - how might you model this?
 covid_bulk <- daily_covid[15:nrow(daily_covid),]
