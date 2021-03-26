@@ -57,9 +57,9 @@ power <- function(alpha,mu_est,sigma,N){
 
 #Compute power with this function and check that it agrees with the simulated power above
 N <- 25 #Set sample size to 25
-sigma <- 5 #Set sample standard deviation to 
+sigma <- 5 #Set sample standard deviation to 5
 mu_est <- 2 #Suppose first our estimated effect size is right
-power(alpha,2,sigma,N)
+power_est <- power(alpha,2,sigma,N)
 
 #Define a function to compute the effective sample size from desired power, the significance level, the effect size estimate, and the data standard deviation
 samp_size <- function(beta,alpha,mu_est,sigma){
@@ -75,5 +75,6 @@ samp_size(0.372,alpha,mu_est,sigma)
 mu_est <- mean(effs[sig])
 power_target <- 0.8 #Set our target power to 80% - we will use this and eff_est to get a sample size
 N <- samp_size(power_target,alpha,mu_est,sigma) #Compute the sample size we think we will need using our effect size estimate
+power_est <- power(alpha,mu_est,sigma,N) #Calculate power using our estimated effect size from above
 actual_pow <- power(alpha,2,sigma,N) #Use the true effect size to compute the actual power of this study
-actual_pow/power #Check the ratio of the actual power to the power we intended
+actual_pow/power_est #Check the ratio of the actual power to the power we intended
